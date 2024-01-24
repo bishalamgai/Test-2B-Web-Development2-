@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        table {
+            text-align: center;
+            margin-left: 10%;
+            margin-right: 50%;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        input,
+        button {
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            align: center;
+        }
+
+        .error {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div align="center">
+        <h1>Booking your place for your dinner!</h1>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" size="22" onblur="NameField()" onfocus="clearError('name')">
+
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" size="22" onblur="PhoneField()" onfocus="clearError('phone')"><br>
+    </div>
+    <br>
+    <div align="margin-left">
+        <h2>Select a time</h2>
+        <input type="radio" id="first" name="seating" value="5" checked>
+        <label for="first">5:00</label><br>
+        <input type="radio" id="second" name="seating" value="6">
+        <label for="second">6:00</label><br>
+        <input type="radio" id="third" name="seating" value="7">
+        <label for="third">7:00</label><br>
+        <input type="radio" id="fourth" name="seating" value="8">
+        <label for="fourth">8:00</label><br>
+        <br>
+        <h2>What would you like to have with us?</h2>
+        <input type="checkbox" id="starters" value="Starters">
+        <label for="starters">Starters</label><br>
+        <input type="checkbox" id="Main" value="Main Course">
+        <label for="Main">Main Course</label><br>
+        <input type="checkbox" id="dessert" value="Desserts">
+        <label for="dessert">Desserts</label><br>
+        <input type="checkbox" id="drinks" value="Drinks">
+        <label for="drinks">Drinks</label><br>
+    </div>
+    <button onclick="submitForm()" id="submit">Submit</button> <span id="FinalMessage"></span>
+
+
+    <script>
+        function NameField() {
+            var TypeName = document.getElementById("name").value.trim();
+            var FinalMessage = document.getElementById("FinalMessage");
+
+            if (TypeName === "") {
+                FinalMessage.innerText = "Error: Name is empty.";
+                document.getElementById("name").classList.add("error");
+            } else if (!/\s/.test(TypeName)) {
+                FinalMessage.innerText = "Error: First and last names are required.";
+                document.getElementById("name").classList.add("error");
+            } else {
+                FinalMessage.innerText = "";
+                document.getElementById("name").classList.remove("error");
+            }
+        }
+
+        function PhoneField() {
+            var phoneInput = document.getElementById("phone").value.trim();
+            var FinalMessage = document.getElementById("FinalMessage");
+
+            if (phoneInput === "") {
+                FinalMessage.innerText = "Error: Phone number is empty.";
+                document.getElementById("phone").classList.add("error");
+            } else if (!/^\d/.test(phoneInput)) {
+                FinalMessage.innerText = "Error: Phone number must start with numbers.";
+                document.getElementById("phone").classList.add("error");
+            } else if (phoneInput.length !== 6) {
+                FinalMessage.innerText = "Error: Phone numbers must have exactly 6 characters.";
+                document.getElementById("phone").classList.add("error");
+            } else {
+                FinalMessage.innerText = "";
+                document.getElementById("phone").classList.remove("error");
+            }
+        }
+
+        function clearError(inputId) {
+            var FinalMessage = document.getElementById("FinalMessage");
+            FinalMessage.innerText = "";
+            document.getElementById(inputId).classList.remove("error");
+        }
+
+        function submitForm() {
+            NameField();
+            PhoneField();
+            
+            var FinalMessage = document.getElementById("FinalMessage");
+             var name = document.getElementById("name").value.trim();
+             var phone = document.getElementById("phone").value.trim();
+             var Time = document.querySelector('input[name="seating"]:checked').value;
+             var Option = [];
+
+             var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+             checkboxes.forEach(function (checkbox) {
+                Option.push(checkbox.value);
+             });
+
+             if (!name || !phone || !Time || Option.length === 0) {
+                 FinalMessage.innerText = "Please fill in all the required fields.";
+                 return;
+             }
+
+             var message = "Reservation for: " + name + " Phone: " + "("+phone+") " +
+                 "at " + Time + " Starters are: " + Option.join(", ");
+
+             FinalMessage.innerText = message;
+            
+        }
+    </script>
+</body>
+
+</html>
